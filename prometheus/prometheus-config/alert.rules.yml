@@ -1,0 +1,31 @@
+groups:
+- name: alert.rules
+  rules:
+
+  - alert: High_Memory_Usage
+    expr: 100* (1-((avg_over_time(node_memory_Buffers_bytes{job="node_exporter"}[30s])/ (1024*1024)) + (avg_over_time(node_memory_MemFree_bytes{job="node_exporter"}[30s])/ (1024*1024)) + (avg_over_time(node_memory_Cached_bytes{job="node_exporter"}[30s])/ (1024*1024))) / (avg_over_time(node_memory_MemTotal_bytes{job="node_exporter"}[30s])/ (1024*1024))) > 80
+    for: 30s
+    labels:
+      severity: Critical
+    # Prometheus templates apply here in the annotation and label fields of the alert.
+    annotations:
+      description: '{{ $labels.instance }} of job {{ $labels.job }} git high memory usage for more than 2 minutes'
+      summary: 'Instance {{ $labels.instance }} got high memory usage'
+
+
+  - alert: Container_Down
+    expr: engine_daemon_container_states_containers{job="docker_daemon",state="stopped"} >=1
+    for: 30s
+    # Prometheus templates apply here in the annotation and label fields of the alert.
+    annotations:
+      description: 'Container has been down for more than 2 minutes.'
+      summary: 'Container down'
+
+  - alert: CPU_High_Utilization
+    expr: 100 - (avg by (instance) (irate(node_cpu_seconds_total{mode="idle"}[1m])) * 100) > 60
+    for: 30s
+    # Prometheus templates apply here in the annotation and label fields of the alert.
+    annotations:
+      description: '{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 2 minutes.'
+      summary: 'Instance {{ $labels.instance }} down'
+

@@ -1,0 +1,61 @@
+global:
+  scrape_interval: 10s
+
+#AlertManager
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+      - '172.16.1.155:9093'
+#Load a rule once and pertiodically evaluate them according to the global
+rule_files:
+  - alert.rules.yml
+
+scrape_configs:
+
+  - job_name: 'backend'
+    scrape_interval: 10s
+
+    static_configs:
+    - targets: ['172.16.2.143:9100']
+      labels:
+        server: backend
+        resource: node_exporter
+    relabel_configs:
+      - source_labels: [server]
+        regex: "backend"
+        replacement: "backendminu"
+        target_label: instance
+
+  - job_name: 'syncmovies'
+    scrape_interval: 10s
+    static_configs:
+      - targets: ['172.16.2.33:9100']
+        labels:
+          server: syncmoviewatchmode
+          resource: node_exporter
+    relabel_configs:
+      - source_labels: [server]
+        regex: "syncmovie(.*)"
+        replacement: "syncmovie"
+        target_label: instance
+
+  - job_name: 'syncmovie_daemon'
+    scrape_interval: 10s
+    static_configs:
+      - targets: ['172.16.2.33:9323']
+        labels:
+          server: syncmoviewatchmode
+
+  - job_name: 'backend_daemon'
+    scrape_interval: 10s
+    static_configs:
+      - targets: ['172.16.2.143:9323']
+        labels:
+          server: syncmoviewatchmode
+
+#  - job_name: 'cAdvisor'
+#         # metrics_path defaults to '/metrics'
+#         # scheme defaults to 'http'.
+#    static_configs:
+#      - targets: ['172.16.2.33:8080']

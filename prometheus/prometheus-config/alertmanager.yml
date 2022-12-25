@@ -1,0 +1,12 @@
+global:
+  resolve_timeout: 30s
+
+    route:
+      receiver: 'slack'
+
+    receivers:
+      - name: 'slack'
+        slack_configs:
+          - channel: '#prometheusalert'
+            api_url: https://hooks.slack.com/services/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
+            send_resolved: true

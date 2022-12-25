@@ -1,0 +1,17 @@
+?
+0
+{}:{}
+slackslack*î£’²§™2:
+¤éó–áĞ¿Ê‚îÒ¬²§™2V
+G
+{}:{alertname="InstanceDown"}
+slackslack*Ä…†ò¼ˆ :	±şîÿ“¦ŠË`Ä´ ò¼ˆ Z
+K
+!{}:{alertname="SynwatchModeDown"}
+slackslack*Œî…Şæ:	©á¢ˆÊ½—–SŒ ŞæX
+I
+{}:{alertname="Container_Down"}
+slackslack*‰ıâŞŠ :	¥¢Ê“ıàÂ›(‰¬©âŞŠ \
+M
+#{}:{alertname="Synwatch_Mode_Down"}
+slackslack*ÁéŠ¶Àƒ$:	øä®öØó‹Á˜¥¶Àƒ$

@@ -1,0 +1,33 @@
+version: "3.7"
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    restart: unless-stopped
+    volumes:
+            - ~/monitoring/prometheus/prometheus-config/:/etc/prometheus/
+    ports:
+      - 9090:9090
+    links:
+      - alertmanager:alertmanager
+
+  grafana:
+    image: grafana/grafana:latest
+    restart: unless-stopped
+    volumes:
+       - ~/monitoring/grafana/grafana.ini:/etc/grafana/grafana.ini
+       - ~/monitoring/grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yaml
+    ports:
+      - 9333:3000
+
+  alertmanager:
+    image: prom/alertmanager:v0.23.0
+    restart: unless-stopped
+    ports:
+      - "9093:9093"
+    volumes:
+      - "~/monitoring/alertmanager/alertmanager-0.24.0.linux-amd64:/config"
+      - alertmanager-data:/data
+    command: --config.file=/config/alertmanager.yml --log.level=debug
+
+volumes:
+  alertmanager-data:

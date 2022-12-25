@@ -1,0 +1,23 @@
+global:
+  slack_api_url: https://hooks.slack.com/services/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
+
+route:
+  group_by: ['staging']
+  group_wait: 3s #How long to wait to BUFFER alerts of the same group before sending a notification initially.
+  group_interval: 20s #https://github.com/prometheus/alertmanager/issues/2647
+  repeat_interval: 30s
+  receiver: 'slack'
+
+receivers:
+- name: 'slack'
+  slack_configs:
+  - send_resolved: true
+    channel: '#prometheus-alert'
+    api_url: https://hooks.slack.com/services/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
+
+inhibit_rules:
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'dev', 'instance']
